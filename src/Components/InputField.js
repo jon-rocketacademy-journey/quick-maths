@@ -53,7 +53,13 @@ export const InputField = (props) => {
           : "primary"
       }
       value={value}
-      onChange={preventDefault}
+      onChange={(e) => {
+        // this allows users to do operations like highlightAll and type over
+        console.log(e.target.value);
+        e.target.value.length < 2
+          ? setValue(e.target.value)
+          : preventDefault(e);
+      }}
       onCopy={preventDefault}
       onDrag={preventDefault}
       onDrop={preventDefault}
