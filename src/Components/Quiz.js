@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Stack } from "@mui/material";
 import { getQuestion } from "../QuickMath/Base";
 import ItemList from "./ItemList";
@@ -11,29 +11,21 @@ import {
 
 export default function Quiz(props) {
   const [questions, setQuestions] = useState([]);
-  const [activeIdx, setActiveIdx] = useState(questions.length);
   const [value, setValue] = useState("");
   const [questionState, setQuestionState] = useState(STATE_INDETERMINATE);
   const timer = useRef(null);
-
-  useLayoutEffect(() => {
-    setQuestions(
-      [
-        ...questions,
-        ...Array(Math.max(NUM_QUESTIONS - questions.length, 0)),
-      ].map(getQuestion)
-    );
-    // eslint-disable-next-line
-  }, []);
+  const { sx, selectedQuestionTypes } = props;
 
   useEffect(() => {
     if (
       questionState !== STATE_CORRECT &&
-      questions[activeIdx]?.a?.toString() === value
+      questions[0]?.a?.toString() === value
     ) {
-      setQuestionState(1);
-      setActiveIdx(activeIdx + 1);
-      setQuestions([...questions, getQuestion()]);
+      setQuestionState(STATE_CORRECT);
+      setQuestions([
+        ...questions.slice(1, questions.length),
+        getQuestion(selectedQuestionTypes),
+      ]);
       timer.current = setTimeout(() => {
         setValue("");
         setQuestionState(STATE_INDETERMINATE);
@@ -42,17 +34,31 @@ export default function Quiz(props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, questionState]);
 
+  useEffect(() => {
+    const new_questions = questions.filter((qns) =>
+      selectedQuestionTypes.includes(qns.type)
+    );
+    if (selectedQuestionTypes.length > 0) {
+      setQuestions([
+        ...new_questions,
+        ...[...Array(Math.max(NUM_QUESTIONS - new_questions.length, 0))].map(
+          () => getQuestion(selectedQuestionTypes)
+        ),
+      ]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedQuestionTypes]);
+
   return (
     <Stack
       direction="column"
       justifyContent="space-around"
       alignItems="center"
       component=""
-      sx={{ width: "100%", ...props.sx }}
+      sx={{ width: "100%", ...sx }}
     >
       <ItemList
         questions={questions}
-        activeIdx={activeIdx}
         questionState={questionState}
         sx={{ pt: 10 }}
       />

@@ -1,8 +1,12 @@
 import {
   AppBar,
+  Autocomplete,
   Avatar,
+  Checkbox,
+  Chip,
   Slide,
   Switch,
+  TextField,
   Toolbar,
   Typography,
   useScrollTrigger,
@@ -10,7 +14,10 @@ import {
 import { styled } from "@mui/material/styles";
 import { useMyThemeContext } from "..";
 import PropTypes from "prop-types";
-
+import { questionTypes } from "../QuickMath/Base";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import { createTheme, ThemeProvider } from "@mui/material";
 function HideOnScroll(props) {
   const { children, window } = props;
   // Note that you normally won't need to set the window ref as useScrollTrigger
@@ -36,16 +43,73 @@ HideOnScroll.propTypes = {
   window: PropTypes.func,
 };
 
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
 export function MyAppBar(props) {
-  const { isDarkMode, setIsDarkMode } = useMyThemeContext();
+  const { isDarkMode, setIsDarkMode, theme } = useMyThemeContext();
+  const innerTheme = createTheme({
+    ...theme,
+    typography: {
+      fontSize: 18,
+    },
+  });
+  const { selectedQuestionTypes, setSelectedQuestionTypes } = props;
   return (
     <HideOnScroll {...props}>
       <AppBar position="fixed">
         <Toolbar>
           <Avatar alt="Quick Maths" src="/logo128.png" sx={{ mr: 2 }} />
-          <Typography variant="h6" sx={{ flexGrow: 1, fontSize: 30 }}>
+          <Typography
+            variant="h6"
+            sx={{ fontSize: 30, display: { xs: "none", sm: "block" }, mr: 2 }}
+          >
             Quick Maths
           </Typography>
+
+          <ThemeProvider theme={innerTheme}>
+            <Autocomplete
+              value={selectedQuestionTypes}
+              onChange={(_, newValue) => {
+                setSelectedQuestionTypes(newValue);
+              }}
+              multiple
+              options={questionTypes}
+              getOptionLabel={(option) => option}
+              renderOption={(props, option, { selected }) => (
+                <li {...props}>
+                  <Checkbox
+                    icon={icon}
+                    checkedIcon={checkedIcon}
+                    style={{ marginRight: 8 }}
+                    checked={selected}
+                  />
+                  {option}
+                </li>
+              )}
+              renderInput={(params) => (
+                <TextField {...params} variant="filled" />
+              )}
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => (
+                  <Chip
+                    variant="outlined"
+                    label={option}
+                    size="small"
+                    {...getTagProps({ index })}
+                  />
+                ))
+              }
+              sx={{
+                backgroundColor: isDarkMode ? undefined : "white",
+                flexGrow: 1,
+                display: "flex",
+                "& .MuiInputBase-root": { fontSize: "1rem", paddingTop: 0 },
+                "& .MuiIconButton-root": { height: 20 },
+                mr: 2,
+              }}
+            />
+          </ThemeProvider>
           <MaterialUISwitch
             defaultChecked
             color="default"

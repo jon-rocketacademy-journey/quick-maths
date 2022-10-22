@@ -1,37 +1,44 @@
+const { v4: uuidv4 } = require("uuid");
+
+const createQuestion = (text, answer, type = null) => {
+  return { id: uuidv4(), q: text, a: answer, type: type };
+};
+
 export const getAdditionQuestion = (difficulty = 10) => {
   const a = randInt(0, difficulty);
   const b = randInt(0, difficulty);
-  return { q: `${a} + ${b}`, a: a + b };
+  return createQuestion(`${a} + ${b}`, a + b, "+");
 };
 
 export const getSubtractionQuestion = (difficulty = 10) => {
   const a = randInt(0, Math.round(difficulty / 2));
   const x = randInt(0, Math.round(difficulty / 2));
-  return { q: `${a + x} - ${a}`, a: x };
+  return createQuestion(`${a + x} - ${a}`, x, "-");
 };
 
 export const getMultiplicationQuestion = (difficulty = 10) => {
   const a = randInt(0, Math.round(difficulty));
   const b = randInt(0, Math.round(difficulty));
-  return { q: `${a} × ${b}`, a: a * b };
+  return createQuestion(`${a} × ${b}`, a * b, "×");
 };
 
 export const getDivisionQuestion = (difficulty = 10) => {
   const a = randInt(1, Math.round(Math.sqrt(difficulty)));
   const x = randInt(0, Math.round(Math.sqrt(difficulty)));
-  return { q: `${a * x} ÷ ${a}`, a: x };
+  return createQuestion(`${a * x} ÷ ${a}`, x, "÷");
 };
 
-export const getQuestion = (n = 4) => {
-  const questionType = Math.floor(Math.random() * n);
-  switch (questionType) {
-    case 0:
+export const getQuestion = (selectedQuestionTypes) => {
+  const idx = Math.floor(Math.random() * selectedQuestionTypes.length);
+  const selectedQuestionType = selectedQuestionTypes[idx];
+  switch (selectedQuestionType) {
+    case "+":
       return getAdditionQuestion();
-    case 1:
+    case "-":
       return getSubtractionQuestion();
-    case 2:
+    case "×":
       return getMultiplicationQuestion();
-    case 3:
+    case "÷":
       return getDivisionQuestion();
     default:
       return null;

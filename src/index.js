@@ -33,7 +33,7 @@ function MyThemeProvider(props) {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <MyThemeContext.Provider value={{ isDarkMode, setIsDarkMode }}>
+      <MyThemeContext.Provider value={{ isDarkMode, setIsDarkMode, theme }}>
         {props.children}
       </MyThemeContext.Provider>
     </ThemeProvider>

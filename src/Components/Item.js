@@ -3,7 +3,7 @@ import { Stack, Typography, Divider } from "@mui/material";
 // TODO: handle on enter https://stackoverflow.com/a/46172509
 
 export const Item = (props) => {
-  const { text } = props;
+  const { text, active } = props;
   return (
     <Stack
       component=""
@@ -18,6 +18,7 @@ export const Item = (props) => {
         align="right"
         sx={{
           flexGrow: 1,
+          color: active ? undefined : "text.disabled",
         }}
       >
         {text}

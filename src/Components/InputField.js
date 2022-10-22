@@ -27,10 +27,12 @@ export const InputField = (props) => {
     } else if (key === "Delete") {
       setValue("");
     } else if (key === "Enter") {
-      console.log("???");
       setQuestionState(STATE_WRONG);
+    } else if (key === "-") {
+      setValue(text[0] === "-" ? text.slice(1, text.length) : "-" + text);
     }
     if (!/\d|\./.test(key)) return;
+
     setValue(text + key);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [key, setKey]);
