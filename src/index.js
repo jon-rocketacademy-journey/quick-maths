@@ -18,6 +18,13 @@ function MyThemeProvider(props) {
       createTheme({
         palette: {
           mode: isDarkMode ? "dark" : "light",
+          text: {
+            success: "#2e7d32",
+            error: "#d32f2f",
+          },
+        },
+        typography: {
+          fontSize: 30,
         },
       }),
     [isDarkMode]

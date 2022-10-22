@@ -1,14 +1,20 @@
-import { Box } from "@mui/material";
+import { Stack } from "@mui/material";
 import { MyAppBar } from "./Components/MyAppBar";
+import Quiz from "./Components/Quiz";
+// import useWindowDimensions from "./Hooks/useWindowDimensions";
 
 function App() {
+  // const { height, width } = useWindowDimensions();
   return (
-    <Box>
+    <Stack
+      direction="column"
+      justifyContent="flex-start"
+      alignItems="center"
+      sx={{ height: "100vh" }}
+    >
       <MyAppBar />
-      <Box>
-        <div style={{ height: "100%" }}></div>
-      </Box>
-    </Box>
+      <Quiz sx={{ flexGrow: 1 }} />
+    </Stack>
   );
 }
 
