@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useState, useRef } from "react";
 import { Stack } from "@mui/material";
-import { getAdditionQuestion } from "../QuickMath/Base";
+import { getQuestion } from "../QuickMath/Base";
 import ItemList from "./ItemList";
 import { InputField } from "./InputField";
 import {
@@ -21,7 +21,7 @@ export default function Quiz(props) {
       [
         ...questions,
         ...Array(Math.max(NUM_QUESTIONS - questions.length, 0)),
-      ].map(getAdditionQuestion)
+      ].map(getQuestion)
     );
     // eslint-disable-next-line
   }, []);
@@ -29,11 +29,11 @@ export default function Quiz(props) {
   useEffect(() => {
     if (
       questionState !== STATE_CORRECT &&
-      questions[activeIdx]?.a.toString() === value
+      questions[activeIdx]?.a?.toString() === value
     ) {
       setQuestionState(1);
       setActiveIdx(activeIdx + 1);
-      setQuestions([...questions, getAdditionQuestion()]);
+      setQuestions([...questions, getQuestion()]);
       timer.current = setTimeout(() => {
         setValue("");
         setQuestionState(STATE_INDETERMINATE);
