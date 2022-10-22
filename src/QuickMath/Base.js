@@ -7,7 +7,7 @@ export const getAdditionQuestion = (difficulty = 10) => {
 export const getSubtractionQuestion = (difficulty = 10) => {
   const a = randInt(0, Math.round(difficulty / 2));
   const x = randInt(0, Math.round(difficulty / 2));
-  return { q: `${a + x} - ${x}`, a: x };
+  return { q: `${a + x} - ${a}`, a: x };
 };
 
 export const getMultiplicationQuestion = (difficulty = 10) => {
@@ -40,3 +40,5 @@ export const getQuestion = (n = 4) => {
 
 const randInt = (lower, upper) =>
   Math.floor(Math.random() * (upper - lower)) + lower;
+
+export const questionTypes = ["+", "-", "×", "÷"];

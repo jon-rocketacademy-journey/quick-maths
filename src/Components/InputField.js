@@ -75,6 +75,7 @@ export const InputField = (props) => {
         "& input": {
           textAlign: "center",
           height: "100%",
+          padding: 0,
         },
         ...props.sx,
       }}
